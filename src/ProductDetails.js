@@ -1,25 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom"; // Import useParams
 import { ProductContext } from "./ProductContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card, Button } from "react-bootstrap";
 
 function ProductDetails() {
-  const { productId } = useParams();
+  const { productId } = useParams(); // Get productId from URL params
   const { products } = useContext(ProductContext);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Checking products for ID:", productId); // Log the productId being searched
-
-    // Iterate through products and log each ID
-    products.forEach((p) => {
-      console.log("Product ID in database:", p._id);
-    });
-
     const foundProduct = products.find((p) => p._id === productId);
+    console.log("Checking products for ID:", productId); 
+
     if (foundProduct) {
       setProduct(foundProduct);
       setLoading(false);

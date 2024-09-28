@@ -1,36 +1,22 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useContext } from "react";
+import { ProductContext } from "./ProductContext"; // Import ProductContext
 import addToCart from "./addtocart";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
 function ProductsList() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/products")
-      .then((response) => {
-        setProducts(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching products:", err);
-        setError(err);
-        setLoading(false);
-      });
-  }, []);
+  const { products } = useContext(ProductContext); // Use the products from context
+  const loading = !products.length; // Determine loading state based on products length
+  const error = !products.length ? "Error: No products available." : null; // Simple error handling
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>{error}</div>;
   }
 
   return (
@@ -56,7 +42,6 @@ function ProductsList() {
               <Card.Text>Discount: {product.discount}%</Card.Text>
             )}
 
-            {/* Add To Cart Button */}
             <Button
               variant="primary"
               onClick={() =>
@@ -72,7 +57,6 @@ function ProductsList() {
               Add To Cart
             </Button>
 
-            {/* View Details Button */}
             <Link to={`/products/${product._id}`}>
               <Button variant="secondary" style={{ marginLeft: "10px" }}>
                 View Details

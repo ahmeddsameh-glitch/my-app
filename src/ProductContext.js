@@ -1,17 +1,27 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
-// Create the ProductContext
 export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/products");
+        console.log("Fetched products:", response.data); // Check fetched data
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
-    <ProductContext.Provider
-      value={{ products, setProducts, loading, setLoading, error, setError }}
-    >
+    <ProductContext.Provider value={{ products }}>
       {children}
     </ProductContext.Provider>
   );
