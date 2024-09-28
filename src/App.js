@@ -1,20 +1,24 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import "./App.css";
-import Home from "./home";
-import BasicExample from "./navbar";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProductsList from "./products";
+import ProductDetails from "./ProductDetails";
+import { ProductProvider } from "./ProductContext";
+import BasicExample from "./navbar"; // Importing the Navbar
+
 function App() {
   return (
-    <>
-      <BasicExample />
+    <ProductProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<ProductsList />} />
-        </Routes>
+        <>
+          <BasicExample />
+          <Routes>
+            <Route path="/" element={<ProductsList />} />
+            <Route path="/products/:productId" element={<ProductDetails />} />
+          </Routes>
+        </>
       </Router>
-    </>
+    </ProductProvider>
   );
 }
+
 export default App;
